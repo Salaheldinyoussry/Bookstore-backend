@@ -132,14 +132,14 @@ module.exports = {
 
         try {
             let query = `delete from  Book_order 
-            where book_isbn=${req.body.book_isbn} and  quantity =${req.body.quantity}  and user_email = '${req.query.email}';`
+            where book_isbn=${req.body.book_isbn} ;`
 
             await DB(query);
 
-            let q = `UPDATE book SET number_of_copies = number_of_copies + ${req.body.quantity} WHERE isbn = ${req.body.book_isbn}`
-            await DB(q);
+          //  let q = `UPDATE book SET number_of_copies = number_of_copies + ${req.body.quantity} WHERE isbn = ${req.body.book_isbn}`
+            //await DB(q);
 
-            console.log(q);
+            //console.log(q);
             return res.json();
 
         } catch (e) {
