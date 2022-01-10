@@ -4,6 +4,8 @@ const _ = require('lodash')
 const async = require('async');
 module.exports = {
     get: async (req, res) => {
+        let search = req.query.search;
+    
 
         try {
             let query = `select 
@@ -12,6 +14,7 @@ module.exports = {
             left join publisher on book.publisher_id = publisher.id
             left join book_author  on book.isbn = book_author.book_isbn
             left join author   on book_author.author_id =author.id
+           ${ search ? ` where title = '${search}' or  isbn = '${search}' or category = '${search}' or publisher.name = '${search}' ` :''}
             ;
             `
             let data = await DB(query);
@@ -141,6 +144,7 @@ module.exports = {
             }, function (err) {
                 //If any of the user creation failed may throw error.
                 if (err) {
+                    console.log(err)
                     return res.status(500).json({ err: err });
      
                 } else {
@@ -206,7 +210,7 @@ module.exports = {
     add: async (req, res) => {
 
         try {
-            
+   
             let q = `select * from publisher where name = '${ req.body.publisher}'`
             let publisherID;
 
@@ -215,7 +219,7 @@ module.exports = {
                 publisherID= publisher[0].id
             }
             else{
-                let q1 = `insert  into publisher (name) values ('${req.body.publisher}' );`
+                let q1 = `insert  into publisher (name , address , telephone) values ('${req.body.publisher}','${req.body.p_name}' ,'${req.body.p_telephone}'  );`
                 publisher = await DB(q1);
                 publisherID = publisher.insertId;
             }
